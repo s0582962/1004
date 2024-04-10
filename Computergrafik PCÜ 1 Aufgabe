@@ -1,0 +1,162 @@
+Schritt 1: Literatur
+
+Folgende Literatur gibt es zur Lehrveranstaltung:
+
+AR and VR Using the WebXR API  (Freier Download)
+
+Die dortigen Beispiele sind schön knapp und einfach, deswegen setze ich darauf. Es lohnt sich, im Buch Hintergründe nachzulesen, die ich in der Übung nicht (oder nur auf Nachfrage) erkläre.
+
+Als weiterführende Literatur zu WebGL gibt es:
+
+Real-Time 3D Graphics with WebGL 2 - Second Edition
+
+Als Einstieg zu Three.js empfehle ich:
+
+Learn Three.js - Fourth Edition
+
+Beispiele zu den Übungen verwenden wir aber aus der dritten Edition dieses Buchs:
+
+Der Download von PDFs zu den letzten beiden Büchern ist während einer kostenfreien Testphase bei packtpub.com möglich.
+
+Die Bücher sind auch in der Bibliothek der HTW erhältlich.
+
+
+Schritt 2: Arbeitsumgebung
+
+Als Arbeitsmittel benötigen wir Git und VS Code. Beides ist auf den Laborrechnern bereits installiert.
+
+Auf Ihrem eigenen Rechner installieren Sie beides ggf. von folgenden Quellen: Git, VS Code
+
+Das Tutorial ist für Windows ausgelegt, es sollte aber auch mit anderen Betriebssystemenfunktionieren. Ich werde versuchen , Ihnen auf Nachfrage zu helfen.
+
+Wir testen die Arbeitsumgebung mit den Beispielen zum Buch.
+
+Öffnen Sie bitte ein Terminal ("Windows: Eingabeaufforderung").
+
+Legen Sie an einem Ort Ihrer Wahl ein Verzeichnis für diese Lehrveranstaltung an:
+
+mkdir cgss24
+
+cd cgss24
+
+Klonen Sie die Beispiele zum Buch von Github:
+
+git clone https://github.com/Apress/ar-vr-using-webxr-api.git
+
+(Das ginge grundsätzlich auch aus VS Code heraus.)
+
+Öffnen Sie im Dateiexplorer die Datei "ch2/index.html" per Doppelklick. Es müsste sich ein Webbrowser öffnen und ein rotes Rechteck anzeigen. Für dieses einfache Beispiel benötigen wir noch keinen Webserver, der Dateien ausliefert.
+
+Nun starten Sie bitte VS Code, um den Quellcode zu betrachten.
+
+Wählen Sie in VS Code "Open Folder" und dann den Ordner "ar-vr-using-webxr-api". Gehen Sie dann in der dortigen Exploreransicht auf "ch2" und dann auf "index.html". Wir sehen hier ein minimales WebGL-Programm, das ein rotes Rechteck rendert. 
+
+(In der Übung werden wir mit WebGL starten und dann zu Three.js übergehen.)
+
+In der linken Menuleiste gibt es ein Dreieck (mit einem Käfer-Symbol), damit aktivieren wir den Debugger.
+Wir werden gefragt, welchen Browser wir auswählen wollen, und können z. B. Chrome wählen. Chrome startet und das rote Rechteck erscheint.
+
+In der Leiste oben ist auch ein Dreieck zu sehen, daneben steht „no configuration“, über das Dreieck können wir ebenfalls den Debugger starten. Tun wir das, werden wir darauf hingewiesen, dass bereits ein Debugger läuft. Wir können nun zunächst das Fenster im Webbrowser schließen.
+(Es gibt ein eigenes kleines Kontrollfenster für den Debugger, damit geht es einfach.)
+
+Wir können jetzt aber auch eine Konfiguration anlegen, dann wird von VS Code eine Datei „launch.json“ erstellt, die wir später nutzen können, um unser Projekt zu konfigurieren (z. B. einen anderen Webbrowser wählen.). Die Konfiguration für VS Code findet sich im Ordner „.vscode“ („launch.json“), die für Git in „.git“ außerdem gibt es noch „.gitattributes“. Es lohnt sich aber nicht, die Git-Dateien anzuschauen.
+
+Wir sehen unten in VS Code die Ausgabe des Javascript-Programms in der Konsole.
+
+Unterhalb des Buttons links mit dem Käfer gibt es noch einen Button mit mehreren Karos, womit man Erweiterungen installieren, aktivieren und deaktivieren kann, das werden wir später benötigen.
+
+Nun können wir versuchen, ein anderes Beispiel zu starten. Über das Dateien-Symbol oben links können wir z. B. ch7_ex6 -> Part1_Floating-Cube -> index.html öffnen.
+
+Klicken wir dann zunächst links auf das "Käferdreieck" und dann oben auf das Dreieck (neben dem Open index.html“ steht, sehen wir aber wieder ein rotes Rechteck. Öfffnen wir dann über das Zahnrad die „launch.json“, sehen wir, dass dort das erste Beispiel fest verdrahtet ist.
+
+Wir ersetzen die Zeile mit file durch: "file": "${workspaceFolder}/${relativeFile}"
+
+Wenn wir dann wieder index.html starten, sehen wir anhand der Überschrift, dass nun die richtige Datei angezeigt wird, allerdings startet das Beispiel nicht. (Später dazu mehr.)
+
+Die Beispiele bis chr3 sollten sich so aber starten lassen. Wir sind jetzt schon auf Seite 111 des korrespondierenden Lehrbuchs, so dass wir uns nun mit den Inhalten beschäftigen sollten.
+
+
+Schritt 3: Das erste WebGL-Programm
+
+Zunächst möchte ich ein paar Hintergründe beleuchten. OpenGL gibt es seit 1992 als API, um auf die Möglichkeiten der Grafikkarte zugreifen zu können.
+Früher hat man Grafikanwendungen auch häufig direkt mit OpenGL programmiert (oft in C++), heute sind Gameengines (z. B. Unity) oberhalb von OpenGL beliebter, da sie mittlerweile oft kostenfrei zur Verfügung stehen, das Programmieren vereinfachen und damit mächtigere Anwendungen ermöglichen.
+
+Grundsätzlich kann man z. B. auch von Unity Web-Anwendungen erzeugen lassen, das geht durch HTML5, Webassembly und Emscripten. Gameengines selbst sind in der Regel in C++ geschrieben.
+
+OpenGL hat eine große Bedeutung im Kontext von Web-Anwendungen,
+WebGL gibt es seit 2011. Es wurde möglich durch das Canvas-Element von HTML5, das es seit 2008 ermöglicht, mit Javascript geschriebene Anwendungen in einem Browserfenster laufen zu lassen. WebGPU als möglicher Nachfolger wird bisher nur von wenigen Browsern unterstützt.
+
+Oberhalb von WebGL gibt es unter anderem Three.js und Babylon.js, die ähnlich wie eine Gameengine das Programmieren erleichtern. Wir werden Three.js verwenden, aber zunächst mit WebGL beginnen. Wir müssen uns also in jedem Fall auch mit HTML und Javascript beschäftigen.
+
+Wir betrachten das Beispiel aus Kapitel 2.  Das HTML-Dokument "index.html" besteht aus Head und Body, Die Inhalte von Head könnten hier komplett gelöscht werden, die Anwendung würde dennoch funktionieren.
+
+Der Tag  <meta name="viewport" content="width=device-width, initial-scale=1.0"> ermöglicht die angemessene Ausgabe auf Retina-Displays, die sonst durch ihre hohe Auflösung winzige Grafiken erzeugen würden, „display:block“ regelt Abstände und verbietet hier die Anzeige von Elementen daneben, „width: 100vw“ beschreibt die Darstellung in der vollständigen Viewport-Breite. Was ein Viewport ist, ist Ihnen evtl. aus der Vorlesung bekannt, im wesentlichen ist es ein Teilfenster im Hauptfenster.
+
+Zum Body: Hier sieht man alle Elemente der Seite, bei uns bisher nur ein Canvas-Element. Scripte kann man zusätzlich angeben, die beiden hier werden hier nicht direkt angezeigt wegen der Einstellung „not-javascript“. (Der Browser führt nur Javascript aus.)
+
+Generell kann man scripte im header oder im body einfügen (oder auslagern), hier wird das untere sogar nach dem body während des Ladens der Webseite direkt ausgeführt, was eigentlich nicht zulässig ist. (Man muss darauf achten, dass beim Ausführen schon alles relevante geladen ist und außerdem, dass mehrere Scripte der Reihe nach ausgeführt werden würden.)
+
+OpenGL (und damit auch WebGL) benötigt in höheren Versionen zwingend so genannte Shader-Programme, die (in mehreren Instanzen) auf den Prozessoren („Cores“) der GPU der Grafikkarte laufen. Zwei minimale Beispiele sieht man hier im body. Später dazu mehr.
+
+Das eigentliche Script beginnt zwingend mit dem Zugriff auf das Canvas-Element und dem initialisieren des GL-Contexts. OpenGL ist ein Zustandsautomat, Funktionen haben möglichst wenige Parameter und referenzieren stattdessen vorher gesetzte Werte im „Graphics Context“
+
+Console.log ist bei Javascript sehr hilfreich und mächtig, wir sehen, in der Console, dass dort sogar der komplette Inhalt der Variablen „gl“ ausgegeben werden kann. Wenn der Debugger läuft, kann man dort zahlreiche Memberdaten einsehen.
+
+Aufgabe a) 
+
+WebGL-Programme zu debuggen, ist nicht ganz einfach. Bauen Sie bitte testweise einen Syntax-Fehler in das erste Shader-Programm ein. Sie sehen jetzt das rote Rechteck nicht mehr, bekommen aber auch keinen Hinweis, was das Problem ist.
+
+Setzen Sie nun bitte folgenden Code nach „gl.compileShader(vertexSahder…“ ein:
+
+    if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
+      console.error(gl.getShaderInfoLog(vertexShader));
+    }
+
+Jetzt müssten Sie in der Console eine Fehlermeldung sehen. Beheben Sie bitte den Fehler wieder, so dass das rote Rechteck zu sehen ist.
+
+
+Schritt 4: Verändern der Funktion
+
+Im nächsten Schritt versuche ich die Funktionalität des WebGL-Programms genau zu erklären. Wenn etwas unklar ist, fragen Sie -in der Präsenzübung- nach.
+ 
+Wenn man Teilprogramme in verschiedenen Adressräumen laufen lässt, muss man sich Gedanken über den Datenaustausch zwischen den Programmen machen. OpenGL verwendet dazu „buffer“.
+
+Das rote Rechteck wird noch zweidimensional beschrieben. In OpenGL geht der Bildschirm per default in der Horizontalen von -1 bis 1, in der vertikalen auch. Das Koordinantenpaar (-1/-1) ist links unten. Das Feld „coordinates“ beschreibt die vier Eckpunkte eines Rechtecks.
+
+Aufgabe b)
+
+Verändern Sie bitte zunächst einen Eckpunkt, schauen Sie sich das Ergebnis an und fügen Sie im zweiten Schritt einen hinzu, so dass nun ein Fünfeck zu sehen ist.
+
+Nach dem Code, den Sie gerade verändert haben, folgen drei OpenGL-Befehle, die die Datenübertragung der Eckpunkte in die Grafikkarte übernehmen: 
+Der lokale Speicher (im Webbrowser: „coordinates“) wird mit „gl.bufferData“ in den Speicherbereich der Grafikkarte übertragen, der vom Script aus dann unter dem Namen „pointsbuffer“ referenziert werden kann. Dazu muss man zunächst einen logischen Buffer anlegen („pointsbuffer“ ist eine „unsigend int“-Variable), und muss, da es mehrere solche Namen/Variablen geben kann, diesen jedesmal „binden“ („gl.bindBuffer“) bevor man sich auf ihn beziehen kann.
+(Die Datentypen werden in Javascript automatisch generiert, da Javascript dynamisch typisiert ist. Dies kann leider auch eine Quelle von Fehlern sein.)
+
+In den folgenden Zeilen werden die Shader in der Grafikkarte installiert. Shader werden in einer eigenen Programmiersprache (hier GLSL) geschrieben, und könnten z. B. in externen Dateien gespeichert werden. Hier stehen sie direkt im Header und werden über „document.querySelector" als Text in die Variablen vsSource und fsSource geschrieben.
+
+Ähnlich wie bei den Buffern muss man zunächst logische Shader kreieren. Hier bindet man aber nicht sondern setzt den Programmtext mit „gl.shaderSource“. Der folgende Ablauf hat Ähnlichkeiten zur C/C++-Welt: Man kompiliert die beiden Shader und linkt sie zu einem Programm zusammen. Die Zeilen bis hin zu gl.linkProgram sehen eigentlich in jedem OpenGL-Programm genauso aus.
+Grundsätzlich kann man auf diese Weise auch mehrere Shader-Programme erzeugen/vorbereiten, zwischen denen man wechseln kann. Das aktuell zu verwendende Programm muss man immer mit „gl.useProgram“ auswählen.
+
+Das Shader-Programm ist nun in der Grafikkarte installiert und kann in mehreren Instanzen parallel Daten verarbeiten und am Ende Pixel in den Bildspeicher schreiben. Wie kommen die Punktdaten aber nun zu den Shadern ?
+Es gibt immer einen Vertexshader, der die Eckpunkte erwartet, dann transformiert/verarbeitet und an einen Rasterer weiterreicht. Der Rasterer ist „fest verdrahtet“ in der Grafikkarte und füllt Polygone mit Pixeln (genauer Fragmenten). Der Rasterer ruft dann für jedes Fragment den Fragmentshader auf, der Operationen pro Pixel ausführt und schließlich in den Bildspeicher schreibt.
+
+Als erstes müssen wir die Verbindung der Daten zum Vertexshader organisieren. Im Vertexshader findet sich die Zeile:
+„attribute vec4 vertex_points;"
+Der Shader erwartet als Eingabe vertex_points, eigentlich mit vier Koordinaten.
+
+Mit der Zeile:
+„const pointsAttributeLocation = gl.getAttribLocation(program, "vertex_points");“
+schaffen wir uns die Möglichkeit, auf diese Variable im Shader zuzugreifen. Mit dem folgenden Befehl „gl.vertexAttribPointer“ verbinden wir unseren Buffer „pointsbuffer“, der noch gebunden ist(!!!), mit „vertex_points“, auf das wir mit „pointsAttributeLocation“ nun zugreifen können. Wir teilen hier zusätzlich mit, dass aus unserem Buffer immer nur zwei Floats gelesen werden sollen, da wir ja noch keine 3D-Daten (z-Koordinate) verwenden.
+
+Diese Verbindung muss noch mit „gl.enableVertexAttribArray„ explizit aktiviert werden. (Der Kommentar „Send the points…“ stimmt hier nicht ganz genau. Die Übertragung erfolgt dann tatsächlich erst in gl.drawArrays)
+
+Der nächste Befehl setzt die Löschfarbe des Bildschirms. Bei „gl.Clear“ wird die Löschfarbe nicht mehr gesetzt, sondern aus dem grafischen Context geholt, wo es vorher mit „gl.clearColor“ eingetragen wurde. So können Parameter beim Aufruf von gl.Clear gespart werden. Dies ist ein typisches Beispiel des Konzepts des Zustandsautomaten.
+
+Aufgabe c)
+
+Verändern Sie die Parameter von clearColor so, dass der Hintergrund grün erscheint. Sie können ruhig herumprobieren. Welche Wertebereiche haben die vier Parameter ? Was bedeuten sie, insbesondere was bedeutet der vierte Parameter ?
+
+Aufgabe d)
+
+Ersetzen Sie testweise den String „TRIANGLE_STRIP“ durch „TRIANGLE_FAN“. Was passiert ?
+
+An dieser Stelle sind wir hoffentlich am Ende der ersten Übung. Sollten wir schneller sein, können wir auch schon mit der nächsten Übung weitermachen. Falls wir langsamer sind, kommen wir an diese Stelle erst beim nächsten Termin. Merken Sie sich auf alle Fälle, was Sie getan haben und sichern Sie Ihre Arbeit.
