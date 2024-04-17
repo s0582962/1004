@@ -128,7 +128,7 @@ function main() {
 
   /*========== Connect the attribute with the vertex shader ==========*/
   function render(now){       
-    now *= 0.001;
+    now *= 0.001;       // R O T A T I O N rotation  S P E E D speed 
     const deltaTime = now - then;
     then = now;
     
@@ -148,8 +148,8 @@ function main() {
 
     mat4.rotate(modelViewMatrix,  // destination matrix
           modelViewMatrix,  // matrix to rotate
-          cubeRotation,     // amount to rotate in radians
-          [0, 0, 1]);       // axis to rotate around (Z)
+          cubeRotation,     // amount to rotate in radians   (Auch Speed)
+          [0, 0, -1]);       // axis to rotate around (X, Y, Z)
 
     gl.uniformMatrix4fv(modelMatrixLocation, false, modelViewMatrix);
             

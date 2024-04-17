@@ -11,9 +11,9 @@ function main() {
     }
       
     /*========== Define and Store the Geometry ==========*/
-    const squares = [
+    const squares = [   //E C K P U N K T E
         // front face
-        -0.3 , -0.3, -0.3,
+        -0.3 , -0.3, -0.3,  //ECKPUNKT 1
          0.3, -0.3, -0.3,
          0.3, 0.3, -0.3,  
 
@@ -36,21 +36,38 @@ function main() {
     gl.bindBuffer(gl.ARRAY_BUFFER, origBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(squares), gl.STATIC_DRAW);
 
+
+    const squareColors = [   // F A R B W E R T E  D E R  E C K P U N K T E  (RGBA Farbmodell)
+      0.0,  0.0,  1.0,  1.0, //FARBWERT für ECKPUNKT 1 (rot-grün-blau-alpha(transparenz)  0 - 1)
+      0.0,  0.0,  1.0,  1.0,
+      0.0,  0.0,  1.0,  1.0,
+      0.0,  0.0,  1.0,  1.0,
+      0.0,  0.0,  1.0,  1.0,
+      0.0,  0.0,  1.0,  1.0,
+
+      1.0,  0.0,  0.0,  1.0,   
+      1.0,  0.0,  0.0,  1.0,  
+      1.0,  0.0,  0.0,  1.0,  
+      1.0,  0.0,  0.0,  1.0,  
+      1.0,  0.0,  0.0,  1.0,  
+      1.0,  0.0,  0.0,  1.0,
+    ];
+    /*
     const squareColors = [
         0.0,  0.0,  1.0,  1.0,
         0.0,  0.0,  1.0,  1.0,
+        0.0,  1.0,  1.0,  1.0,
         0.0,  0.0,  1.0,  1.0,
-        0.0,  0.0,  1.0,  1.0,
-        0.0,  0.0,  1.0,  1.0,
+        0.0,  1.0,  0.0,  1.0,
         0.0,  0.0,  1.0,  1.0,
 
         1.0,  0.0,  0.0,  1.0,   
-        1.0,  0.0,  0.0,  1.0,  
-        1.0,  0.0,  0.0,  1.0,  
-        1.0,  0.0,  0.0,  1.0,  
+        1.0,  0.0,  1.0,  1.0,  
+        1.0,  1.0,  0.0,  1.0,  
+        1.0,  0.0,  1.0,  1.0,  
         1.0,  0.0,  0.0,  1.0,  
         1.0,  0.0,  0.0,  1.0,
-    ];
+    ];*/
      
       const colorBuffer = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
