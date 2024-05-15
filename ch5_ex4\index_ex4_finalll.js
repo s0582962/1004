@@ -97,12 +97,22 @@ function main() {
 
 
     //!!!! b)
+    var stats = initStats();        //FPS ANZEIGE
+
+
     var controls = new function () {
         this.rotationSpeed = 0.02;
     };
+    
+    var controlsphere = new function () {
+        this.rotationSpeed = -0.02;
+    };
+    
     var gui = new dat.GUI();
     
-    gui.add(controls, 'rotationSpeed', 0, 0.5);
+    gui.add(controls, 'rotationSpeed', 0, 0.5).name('Rotation Cube');
+    gui.add(controlsphere, 'rotationSpeed', -0.5, 0).name('Rotation Sphere');
+    
     //////////////////////////////////////////
     
 
@@ -135,11 +145,16 @@ function main() {
     scene.add(ambientLight);
 
 
+    // attach them here, since appendChild needs to be called first
+    var trackballControls = initTrackballControls(camera, gl);
+    var clock = new THREE.Clock();
 
 
     // DRAW
     function draw(time){
         time *= 0.001;
+
+        trackballControls.update(clock.getDelta());
 
         if (resizeGLToDisplaySize(gl)) {
             const canvas = gl.domElement;
@@ -152,17 +167,20 @@ function main() {
         cube.rotation.y += controls.rotationSpeed;
         cube.rotation.z += controls.rotationSpeed;
 
-        sphere.rotation.x += -1*controls.rotationSpeed;
-        sphere.rotation.y += -1*controls.rotationSpeed;
-        sphere.rotation.y += -1*controls.rotationSpeed;
+        sphere.rotation.x += -1*controlsphere.rotationSpeed;
+        sphere.rotation.y += -1*controlsphere.rotationSpeed;
+        sphere.rotation.y += -1*controlsphere.rotationSpeed;
 
         light.position.x = 20*Math.cos(time);
         light.position.y = 20*Math.sin(time);
         gl.render(scene, camera);
+        
+        stats.update();
+
         requestAnimationFrame(draw);
     }
 
-///// SCHRITT 3
+
     var loader = new THREE.OBJLoader();
 
     var texture = textureLoader.load('textures/stone.jpg');
@@ -191,6 +209,7 @@ function main() {
               console.log(error);
              console.log( 'An error happened' );
         }
+
   );
 
     requestAnimationFrame(draw);
@@ -205,5 +224,6 @@ function resizeGLToDisplaySize(gl) {
     if (needResize) {
         gl.setSize(width, height, false);
     }
+
     return needResize;
 }
