@@ -16,6 +16,7 @@ function init() {
   spotLight.intensity = 0.6;
   scene.add(spotLight);
 
+  /*
   // call the render function
   var step = 0;
   var material = new THREE.MeshToonMaterial({color: 0x7777ff})
@@ -44,6 +45,8 @@ function init() {
   spGui.add(material, 'wireframeLinewidth', 0, 20);
 
   camera.lookAt(controls.selected.position);
+
+  */
   render();
 
   function render() {
