@@ -33,6 +33,8 @@ function main() {
     scene.background = new THREE.Color(0.3, 0.5, 0.8);
     const fog = new THREE.Fog("grey", 1,90);
     scene.fog = fog;
+    var grid = new THREE.GridHelper(100, 10); //add grid
+    //scene.add(grid);
 
     // create the cube 
 
@@ -68,7 +70,6 @@ function main() {
         //normalMap: planeNorm 
     });
 
-
     //!!!! b)
     var stats = initStats();        //FPS ANZEIGE
     var controls = new function () {
@@ -86,7 +87,8 @@ function main() {
 
     const plane = new THREE.Mesh(planeGeometry, planeMaterial);
     plane.rotation.x = Math.PI /2;
-    //scene.add(plane);
+    
+    scene.add(plane);
 
     //LIGHTS
     const color = 0xffffff;
